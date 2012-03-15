@@ -1,0 +1,30 @@
+From 8452fcad8f4e7cf5ae8c21084e01c5934e54b3e6 Mon Sep 17 00:00:00 2001
+From: Clint Savage <herlo1@gmail.com>
+Date: Mon, 5 Mar 2012 12:11:19 -0700
+Subject: [PATCH] fixed a traceback when self.ayum.prerepoconf does not exist
+
+---
+ src/pypungi/__init__.py |    7 ++++++-
+ 1 files changed, 6 insertions(+), 1 deletions(-)
+
+diff --git a/src/pypungi/__init__.py b/src/pypungi/__init__.py
+index 75652c7..f9acd65 100644
+--- a/src/pypungi/__init__.py
++++ b/src/pypungi/__init__.py
+@@ -163,7 +163,12 @@ class Pungi(pypungi.PungiBase):
+         yumconf.yumvar = yumvars
+         self.ayum._conf = yumconf
+         # I have no idea why this fixes a traceback, but James says it does.
+-        del self.ayum.prerepoconf
++        # without testing the variable, it dumps a traceback in certain cases as well
++        try:
++            del self.ayum.prerepoconf
++        except:
++            pass
++
+         self.ayum.repos.setCacheDir(self.ayum.conf.cachedir)
+ 
+         arch = self.config.get('pungi', 'arch')
+-- 
+1.7.7.6
+

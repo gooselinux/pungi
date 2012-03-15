@@ -2,13 +2,15 @@
 
 Name:           pungi
 Version:        2.0.22
-Release:        1%{?dist}
+Release:        1%{?dist}.goose.1
 Summary:        Distribution compose tool
 
 Group:          Development/Tools
 License:        GPLv2
 URL:            https://fedorahosted.org/pungi
 Source0:        https://fedorahosted.org/pungi/attachment/wiki/%{version}/%{name}-%{version}.tar.bz2
+Patch1001:      0001-fixed-a-traceback-when-self.ayum.prerepoconf-does-no.patch
+
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 Requires:       anaconda-runtime >= 11.4.1.5, yum => 3.2.19, repoview, createrepo >= 0.4.11
 BuildRequires:  python-devel
@@ -21,7 +23,7 @@ A tool to create anaconda based installation trees/isos of a set of rpms.
 
 %prep
 %setup -q
-
+%patch1001 -p1 -b .goose
 
 %build
 %{__python} setup.py build
@@ -56,6 +58,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Mon Mar 5 2012 Clint Savage <herlo@gooseproject.org> - 2.0.22-1.goose.1
+- Properly ignore if variable doesn't exist in the first place
+
 * Tue Aug 24 2010 Jesse Keating <jkeating@redhat.com> - 2.0.22-1
 - Backport a yum traceback
 
